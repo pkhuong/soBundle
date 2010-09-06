@@ -1,0 +1,77 @@
+##############################################################################
+################################# makefile ###################################
+##############################################################################
+#									     #
+#   makefile of bundle, unconstrained version				     #
+#									     #
+#   'make clean' cleans up						     #
+#   'make' or 'make bundle' builds the module				     #
+#									     #
+#                                VERSION 3.10				     #
+#                	        18 - 10 - 2004				     #
+#									     #
+# 		               Implementation by:			     #
+#									     #
+#			       Antonio Frangioni			     #
+#									     #
+#   			   Operations Research Group			     #
+#			  Dipartimento di Informatica			     #
+#   			     Universita' di Pisa			     #
+#									     #
+##############################################################################
+
+# module name
+NAME = bundle
+
+# debug switches
+SW = -g
+
+# production switches
+#SW = -O -w
+
+# libreries
+LIB = -lm
+
+# compiler
+CC = g++
+
+# default target- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+default: $(NAME)
+
+# clean - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+clean:
+	rm -f *.o *~ $(NAME)
+
+
+# main module (linking phase) - - - - - - - - - - - - - - - - - - - - - - - -
+
+OBJ =   Bundle.o \
+	MinQuad.o \
+	QPBundle.o \
+	bundleXX.o \
+	Main.o
+
+$(NAME): $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(LIB) $(SW)
+
+# dependencies: every .o from its .C + every (recursively) included .h- - - -
+
+Bundle.o: Bundle.C Bundle.h OPTtypes.h OPTvect.h
+	$(CC) -c $*.C -o $@ $(SW)
+
+MinQuad.o: MinQuad.C MinQuad.h OPTtypes.h OPTvect.h
+	$(CC) -c $*.C -o $@ $(SW)
+
+QPBundle.o: QPBundle.C QPBundle.h Bundle.h MinQuad.h OPTtypes.h OPTvect.h
+	$(CC) -c $*.C -o $@ $(SW)
+
+bundleXX.o: bundleXX.C bundleXX.h QPBundle.h Bundle.h MinQuad.h OPTtypes.h\
+	OPTvect.h
+	$(CC) -c $*.C -o $@ $(SW)
+
+Main.o: Main.C bundleXX.h QPBundle.h Bundle.h MinQuad.h OPTtypes.h OPTvect.h
+	$(CC) -c $*.C -o $@ $(SW)
+
+############################# End of makefile ################################

@@ -1,0 +1,130 @@
+/*--------------------------------------------------------------------------*/
+/*------------------------- File Manual ------------------------------------*/
+/*--------------------------------------------------------------------------*/
+/*--                                                                      --*/
+/*-- Small User Manual for a C++ implementation of the [B]TT algorithm    --*/
+/*-- for solving [box-constrained] Quadratic Problems arising as descent  --*/
+/*-- direction finding subproblems within [box-constrained] Bundle        --*/
+/*-- algorithms.							  --*/
+/*--                                                                      --*/
+/*--                            VERSION 2.10				  --*/
+/*--                	       18 - 10 - 2004			       	  --*/
+/*--                                                                      --*/
+/*--                          Antonio Frangioni                           --*/
+/*--                                                                      --*/
+/*--                       Operations Research Group                      --*/
+/*--                      Dipartimento di Informatica                     --*/
+/*--                         Universita' di Pisa                          --*/
+/*--                                                                      --*/
+/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+       #   # #### ##### ####      #   #  ###  #   # #   #  ###  #
+       #   # #    #     #   #     ## ## #   # ##  # #   # #   # #
+       #   # #### ###   ####      # # # ##### # # # #   # ##### #
+       #   #    # #     #  #      #   # #   # #  ## #   # #   # #
+       ##### #### ##### #   #     #   # #   # #   # ##### #   # #####
+
+       ##############################################################
+
+
+INTRODUCTION
+------------
+
+This file is a short user manual for the second distribution of a C++
+Object-Oriented codes implementing the [B]TT algorithm for solving (box-
+constrained) Quadratic Programming Problems arising as tentative descent
+direction problems in Bundle algorithms for Nondifferentiable Optimization
+(and somewhere else).
+
+The code is provided for academic purposes only: more details about
+conditions limiting use and distribution of this code can be found in
+the license file (academicl.txt).
+
+The author can be reached at
+
+  frangio@di.unipi.it
+
+Current version of TT is:		4.10
+Current date is:			October 18, 2004
+
+Current version of BTT is:		3.20
+Current date is:			October 18, 2004
+
+This release comes out with the following files:
+
+Manual		// this file
+academicl.txt   // license conditions
+OPTtypes.h	// type definitions
+OPTvect.h	// general purpose (lin. algebra) procedures
+MinQuad.h	// implementation of the TT algorithm
+MinQuad.C
+BMinQuad.h	// implementation of the BTT algorithm
+BMinQuad.C
+MainAlg.C	// example of (fake) main algorithm using [B]TT
+
+HOW TO USE IT
+-------------
+
+Using [B]TT requires the following steps:
+
+1) View OPTtypes.h to learn the type conventions adopted throughout the code.
+   You can change some (or all) of the types definition: actually, it is
+   advisable for you to do it, especially if you can use "smaller" types than
+   those currently selected. For example, try to set type "SgNum" to the
+   smallest number type that can hold the entries of the subgradients of your
+   functions: sometimes, chars or short ints suffice, and you can save memory
+   and gain speed.
+
+2) View MinQuad.h to learn about the interface of class MinQuad: you should
+   find everything clear from the detailed comments given there. Do the same
+   with BMinQuad.h if you need to handle box constraints on the space of the
+   function, otherwise disregard the BMinQuad.* stuff - you can even delete
+   them.
+
+3) Edit MinQuad.h and look at the macro definition part: you will find
+   several compile time switches that let you control many features of the
+   algorithm without knowing its details. Some switches simply affects how
+   (if any) output is produced, others can have a deep influence on the
+   performances of the code. The meaning of the swithces is explained there,
+   for all that is possible to explain. Note that all the settings should
+   ensure convergence (but for obviously bad settings), but not necessarly
+   with the same number of iterations or running time, since for instance the
+   way in which calculations are done can be changed. Moreover, possibly not
+   all the combinations of switches have been fully tested. Do the same with
+   BMinQuad.h, if you plan to use it. Note that some switches may influence
+   the interface of the class, changing the set of public methods.
+
+5) If you still need some help, MainAlg.C contains a very roughly sketched
+   example of how the codes can be used within a [constrained] NDO solver.
+   This QP solver has been fully optimized for the purpose, but it can solve
+   any kind of QPs of the proper form - it has been successfully used in
+   non-NDO applications as well. Using MainAlg.C as a template, if that
+   helps you, you have to construct your derived class which implements
+   the pure virtual methods of [B]MinQuad, and all the rest of the code
+   needed for your application.
+
+6) Compile yor code and let it run ...
+
+				   ... and good luck!
+
+					Antonio Frangioni
+
+
+POST SCRIPTUM
+-------------
+
+Don't forget to tell us that you are using our code. You can have the improved
+versions as soon as they are released. We will be glad to hear comments
+(especially if enthusiastic), critics, bug reports and so on. We will be glad
+to share ideas and experiences. We are happy if you find this code useful.
+But since we are mantaining it for our own use, we cannot spend much time
+solving *your* problems - just the time to read a couple of e-mails and send
+you fast suggestions if the problem is easily solvable, but nothing more.
+Other than our good will and the few time we have to spare, we can't offer
+you support. However, in case of problems you can try to send us a "verbose"
+log (see [B]MinQuad.h for details) to help us to quickly spot easy problems.
+
+/*--------------------------------------------------------------------------*/
+/*-------------------------- End File manual -------------------------------*/
+/*--------------------------------------------------------------------------*/

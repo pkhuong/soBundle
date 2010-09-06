@@ -1,0 +1,23 @@
+10	Number of variables of the function
+
+100	max number of iterations for each Bundle call
+20	discard items when they have been useless for <this> iterations
+100	max Bundle size
+10	max increase of t at each iteration
+.1	max decrease of t at each iteration
+.1	m1 parameter: SS if actual improvement >= m1 * predicted improvement
+.3	m2 parameter, only used in "soft" Long-Term t-strategy
+3	m3 parameter: if Alfa1 > m3 * Sigma, decrease t
+10	tStar: stopping parameter
+1e-6	EpsLin: stopping parameter
+1e+3	maximum value for t
+1e-3	minimum value for t
+.1	initial value for t
+0	t-strategy (0 = heuristic, 1 = soft, >1 = hard)
+.01	cut-off factor for pricing in CMinQuad
+1e6	UpsU = EpsLin * <this value>
+10	Pricing parameter: do pricing for the first <this> iterations ...
+5	... and afterwards every <this> iterations (<this> = 0 ==> no pricing)
+5	Remove variables if inactive for <this> consecutive pricings
+
+3	Value for `Cntr' in bundleXX
