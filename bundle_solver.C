@@ -28,6 +28,7 @@ public:
         void set_lambda(const double * lambda);
         void set_uc(unsigned start, unsigned end);
         void set_uc(const unsigned * indices);
+        void translate_subgradients (const double * alpha);
 
         sparse_vector get_solution();
         void get_solution(double * lambda);
@@ -153,6 +154,8 @@ void solver_impl::set_uc(unsigned start, unsigned end)
 { SetUC(start, end, 0); }
 void solver_impl::set_uc(const unsigned * indices)
 { SetUC(0, 0, indices); }
+void solver_impl::translate_subgradients (const double * alpha)
+{ TranslateSubgradients(alpha); }
 
 sparse_vector solver_impl::get_solution()
 {
@@ -418,6 +421,7 @@ solver_impl::AggrPrimalSol(cHpRow Mlt, cIndex_Set NmSt,
 DEF(void, set_lambda, (const double * lambda), (lambda))
 DEF(void, set_uc, (unsigned start, unsigned end), (start, end))
 DEF(void, set_uc, (const unsigned * indices), (indices))
+DEF(void, translate_subgradients, (const double * alpha), (alpha));
 
 DEF(sparse_vector, get_solution, (void), ())
 DEF(void, get_solution, (double * lambda), (lambda))
@@ -647,6 +651,11 @@ void bundle_set_uc_range (bundle_solver_t * bundle,
 void bundle_set_uc_indices(bundle_solver_t * bundle, const unsigned * indices)
 {
         ((bundle::solver*)bundle)->set_uc(indices);
+}
+
+void bundle_translate_subgradients(bundle_solver_t * bundle, const double * alpha)
+{
+        ((bundle::solver*)bundle)->translate_subgradients(alpha);
 }
 
 void

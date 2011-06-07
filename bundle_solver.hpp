@@ -96,6 +96,7 @@ struct solver
         void set_lambda(const double * lambda);
         void set_uc(unsigned start, unsigned end);
         void set_uc(const unsigned * indices);
+        void translate_subgradients (const double * alpha);
 
         sparse_vector get_solution();
         void get_solution(double * lambda);

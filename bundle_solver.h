@@ -87,6 +87,8 @@ void
 bundle_set_uc_range(bundle_solver_t *, unsigned start, unsigned end);
 void
 bundle_set_uc_indices(bundle_solver_t *, const unsigned * indices);
+void
+bundle_translate_subgradients(bundle_solver_t *, const double * alpha);
 
 void
 bundle_get_solution(bundle_solver_t *, struct bundle_sparse_vector * OUT_vector);
