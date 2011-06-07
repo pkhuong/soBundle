@@ -101,6 +101,7 @@ struct solver
         void get_solution(double * lambda);
         double get_Fi(void);
         double get_best_Fi(void);
+        int get_bundle_size(void);
 
         bool current_solution_is_last(void);
         status_t get_bundle_status(void);

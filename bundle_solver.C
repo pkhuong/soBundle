@@ -36,6 +36,7 @@ public:
 
         bool current_solution_is_last(void);
         status_t get_bundle_status(void);
+        int get_bundle_size();
 
         status_t solve_with_callbacks(callbacks *);
 
@@ -165,6 +166,8 @@ double solver_impl::get_best_Fi () { return ReadBestFiVal(); }
 bool solver_impl::current_solution_is_last() { return CurrentIsLast(); }
 status_t solver_impl::get_bundle_status ()
 { return (status_t)GetBStatus(); }
+
+int solver_impl::get_bundle_size() { return BSize(); }
 
 status_t solver_impl::solve_with_callbacks (callbacks * callbacks_ptr)
 {
@@ -413,6 +416,7 @@ DEF(double, get_best_Fi, (void), ())
 
 DEF(bool, current_solution_is_last, (void), ())
 DEF(status_t, get_bundle_status, (void), ())
+DEF(int, get_bundle_size, (void), ())
 
 DEF(status_t, solve_with_callbacks,
     (callbacks * callbacks_ptr), 
@@ -669,6 +673,12 @@ bundle_status_t
 bundle_get_status (bundle_solver_t * bundle)
 {
         return ((bundle::solver*)bundle)->get_bundle_status();
+}
+
+int
+bundle_get_bundle_size (bundle_solver_t * bundle)
+{
+        return ((bundle::solver*)bundle)->get_bundle_size();
 }
 
 bundle_status_t

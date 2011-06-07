@@ -101,6 +101,8 @@ int
 bundle_current_solution_is_last(bundle_solver_t *);
 bundle_status_t
 bundle_get_status(bundle_solver_t *);
+int
+bundle_get_bundle_size(bundle_solver_t *);
 
 bundle_status_t
 bundle_solve_with_callbacks(bundle_solver_t *, struct bundle_callbacks * callbacks);
