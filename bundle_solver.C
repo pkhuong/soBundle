@@ -37,6 +37,7 @@ public:
         bool current_solution_is_last(void);
         status_t get_bundle_status(void);
         int get_bundle_size();
+        sparse_vector get_dual_basis();
 
         status_t solve_with_callbacks(callbacks *);
 
@@ -168,6 +169,15 @@ status_t solver_impl::get_bundle_status ()
 { return (status_t)GetBStatus(); }
 
 int solver_impl::get_bundle_size() { return BSize(); }
+sparse_vector solver_impl::get_dual_basis()
+{
+        sparse_vector out;
+        out.count = ReadBDim();
+        out.indices = ReadBase();
+        out.values = ReadMult();
+
+        return out;
+}
 
 status_t solver_impl::solve_with_callbacks (callbacks * callbacks_ptr)
 {
@@ -417,6 +427,7 @@ DEF(double, get_best_Fi, (void), ())
 DEF(bool, current_solution_is_last, (void), ())
 DEF(status_t, get_bundle_status, (void), ())
 DEF(int, get_bundle_size, (void), ())
+DEF(sparse_vector, get_dual_basis, (void), ())
 
 DEF(status_t, solve_with_callbacks,
     (callbacks * callbacks_ptr), 
@@ -679,6 +690,12 @@ int
 bundle_get_bundle_size (bundle_solver_t * bundle)
 {
         return ((bundle::solver*)bundle)->get_bundle_size();
+}
+
+void
+bundle_get_dual_basis (bundle_solver_t * bundle, struct bundle_sparse_vector * OUT_vec)
+{
+        *OUT_vec = ((bundle::solver*)bundle)->get_dual_basis();
 }
 
 bundle_status_t

@@ -105,6 +105,7 @@ struct solver
 
         bool current_solution_is_last(void);
         status_t get_bundle_status(void);
+        sparse_vector get_dual_basis();
 
         status_t solve_with_callbacks(callbacks *);
 
