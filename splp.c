@@ -1,5 +1,5 @@
 #define RUNME /*
-gcc -m32 -std=gnu99 -O2 -ggdb $CFLAGS $0 -W -Wall -L. -I. -lbundle -o `basename $0 .c`
+gcc -std=gnu99 -O2 -ggdb $CFLAGS $0 -W -Wall -L. -I. -lbundle -o `basename $0 .c`
 exit $?
 
 Instances:
