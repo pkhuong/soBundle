@@ -24,7 +24,7 @@
 NAME = bundle
 
 # debug switches
-SW = -g -ggdb -O2 -fPIC -W -Wall
+SW = -g -ggdb -O2 -fPIC -W -Wall -m32
 
 # production switches
 #SW = -O -w
