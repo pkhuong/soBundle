@@ -1,0 +1,5 @@
+make
+
+Include bundle_solver.h or .hpp
+
+link your application with -lbundle, make sure the .a or the .so are in the search path.
