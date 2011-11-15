@@ -1,0 +1,120 @@
+Very thin wrapper around A. Frangioni's [B]TT bundle method
+
+The (fairly old) version of [B]TT that's packaged here exposes an
+interface that can be difficult to work with.  soBundle is a thin
+wrapper that allows the library to be compiled separately, or even
+loaded dynamically, and used through opaque handles, in C++, C or
+language that have C-compatible foreign interfaces.
+
+The wrapper was created to simplify common cases, and does not expose
+the full gamut of possibilities in the underlying library.  However,
+it should be easy to see how the wrapper objects can be modified to
+allow access to additional methods.  In keeping with the goal of
+simplifying common usage, the wrapper offers a direct-style interface,
+which can be easier to use than the callback-based approach in [B]TT
+(which is still available through the wrapper).
+
+Do note that the original academic license (academicl.txt) always
+applied to the [B]TT.  Read it and make sure to comply.
+
+* Files
+
+Wrapper:
+ bundle_solver.hpp - C++ header file
+ bundle_solver.h   - C header file (include with extern "C" in C++)
+ bundle_solver.C   - implementation
+
+Examples:
+ splp.c
+ test.c
+ test2.c
+
+Rest: A. Frangioni's bundle code.
+
+* Usage
+
+bundle::sparse_vector is either a dense vector of count values
+(indices is NULL), or a sequence of count index/value pairs.
+
+bundle::config (or bundle_config) are structures of configuration
+parameters.  The field definition are explicitly laid out in
+bundle_solver.h.  The C++ interface adds methods to more easily set
+parameters in a single expression: for example,
+bundle::config::with_bundle_size returns a copy of the current
+configuration structure, but with the bundle_size field updated.  Once
+the configuration is correct, bundle::config::make_solver is called
+(with the number of variables) to get a bundle::solver.
+
+In C, bundle_config_init can be used to initialize a bundle_config
+struct and bundle_solver_create_from_config to create a solver.
+
+Note that, in C++, bundle::solver objects may not be copied.  Correct
+initialization usually suffices; otherwise, a pointer to the object
+can be used.
+
+The solver itself is best documented by the very short code and the
+actual library's documentation.
+
+bundle::solver::set_lambda is used to set the current guess for the
+optimum (initial values).  In a lagrangian relaxation setting, this is
+the initial value for the vector of lagrangian multipliers.  This
+vector defaults to 0, or the previous best value if warm-starting.
+
+bundle::solver::set_uc is used to specified unconstrained variables;
+by default all variables are non-negative (i.e. multipliers for <
+constraints).  Either a half-open range of indices or a vector of
+indices (-1U terminated) can be passed.  The function can only be
+called once, when the bundle is empty (not during a solve).
+
+bundle::solver::translate_subgradients is useful when the bundle
+method is used repeatedly with different cost vectors (e.g. as a
+solver in another lagrangian relaxation scheme).  It must provide an
+increment for each subgradient in the bundle (using the indices
+returned as `name' during the search).
+
+bundle::solver::get_solution returns the current estimate of a/the
+optimal point.  A pointer to an array of [number of variables] doubles
+can also be passed to get a dense vector.
+
+bundle::solver::get_Fi returns the value of the estimate, while
+get_best_Fi returns that of the best point so far.  Depending on the
+acceptance policy, these may differ.
+
+bundle::solver::get_dual_basis returns the current dual basis which
+can be useful to, e.g., average solutions to the subproblem into a
+solution that's superoptimal and nearly feasible in the full problem.
+
+Solving itself can be done with solve_with_callbacks, with the
+callbacks corresponding to the methods to override in the original
+library.  SetGi receives the address in which to write the
+subgradient, and its name; Fi computes the value at the given point;
+GetGi copies the subgradient in.
+
+It may be more convenient to use a direct-style interface, without any
+inversion of control.  bundle::solver::start_solving begins a solve,
+while bundle::solver::stop_solving aborts it (necessary before
+starting another solve).  bundle::solver::solve_done_p returns whether
+the library has satisfied its stopping criteria.
+bundle::solver::{get_current_lambda, get_gi_dest, register_values} are
+used, respectively, to get the variable values to evaluate, get the
+location in which the subgradient should be written, and to send back
+the evaluation result.
+
+A typical loop would look like:
+
+for (solver.start_solving(); !solver.solve_done_p();) {
+    multipliers = solver.get_current_lambda();
+    double * subgradient = solver.get_gi_dest();
+    [ compute subgradient, value ]
+    if (solver.register_values()) break;
+}
+
+solver.stop_solving();
+
+** The convenience comes at a potentially steep price: for each solve,
+   a thread is spawned for the solver to execute.  When solving very
+   simple instances, this may incur significant overhead.
+
+For more information, the relationship with the original library's
+code should be obvious, and the documentation in the latter library is
+pretty good.
